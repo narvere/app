@@ -32,10 +32,18 @@ services:
         aliases:
           - flask-app
   certbot:
-    image: certbot/certbot:latest
-    command: certonly --webroot --webroot-path=/usr/share/ngnix/html/letsencrypt --email deniss.hohlov@gmail.com --agree-tos --no-eff-email -d t10.ee
+    image: certbot/certbot
+    depends_on:
+      - nginx
+    container_name: certbot
+    command: certonly --webroot --webroot-path=/var/www/html --email deniss.hohlov@gmail.com --agree-tos --no-eff-email -d t10.ee
     volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/data:/usr/share/ngnix/html/letsencrypt
+      - etc-letsencrypt:/etc/letsencrypt
+      - www-html:/var/www/html
 networks:
   my-network:
+
+volumes:
+  www-html:
+  dbfiles:
+  etc-letsencrypt:
